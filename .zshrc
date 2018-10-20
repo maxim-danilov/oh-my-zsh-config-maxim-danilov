@@ -6,12 +6,29 @@ plugins=(
   git
   zsh-autosuggestions
   vi-mode
+  history-substring-search
 )
 
 source $ZSH/oh-my-zsh.sh
 
 # Colors:
 eval `dircolors ~/.dir_colors/dircolors`
+
+# Highlighting:
+source /home/ghz/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# Large history file
+HISTSIZE=10000000
+SAVEHIST=10000000
+
+# History search using up/down keys
+bindkey "^[[A" history-substring-search-up
+bindkey "^[[B" history-substring-search-down
+# Prevent duplicates in history
+setopt hist_ignore_all_dups hist_save_nodups
+
+# Remove hostname:
+prompt_context() {} 
 
 # Aliases:
 export NVM_DIR="$HOME/.nvm"
@@ -28,19 +45,12 @@ alias hg='history | grep '
 alias hv='history | vim -'
 alias copy='xsel -ib'
 alias paste='xsel --clipboard'
+alias vimclipboard='paste | vim -'
 alias mv="mv -v"
 alias rm="rm -vi"
 alias cp="cp -v"
 alias install="sudo apt install "
-
-alias tovim='vim -'
-alias vimclipboard='paste | tovim'
-
-# Remove hostname:
-prompt_context() {} 
-
-# Highlighting:
-source /home/ghz/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+alias update="sudo apt update"
 
 # My functions:
 mkdircd () {
@@ -57,4 +67,9 @@ pathtofile () {
     /*) printf '%s\n' "$1";;
     *) printf '%s\n' "$PWD/$1";;
   esac
+}
+
+function findtextinfiles 
+{
+  grep -rnw '.' -e "$1"; 
 }
